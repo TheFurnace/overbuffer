@@ -38,14 +38,17 @@ browser.menus.create( {
 /*
 The click event listener, where the stuff is done
 */
-browser.menus.onClicked.addListener( (info, tab) => {
-  if(info.menuItemId === "overbuff-lookup") {
+browser.menus.onClicked.addListener( ( info, tab ) => {
+  if( info.menuItemId === "overbuff-lookup" ) {
+    if( info.selectionText.match(/^[^!@#$%^&*()+=`~\\|'"/?,.<>\d][^!@#$%^&*()+=`~\|'"/?,.<>]{2,11}#\d{4,5} ?$/u) ) {
+      var url = "https://www.overbuff.com/players/pc/";
+      var battleTag = info.selectionText.replace( "#","-" );
+      url = url + battleTag;
+      browser.tabs.create( {
+        "url": url
+      } );
+    } else {
+      alert("Not a valid Battle.net id")
+    }
   }
-    var url = "https://www.overbuff.com/players/pc/";
-    var battleTag = info.selectionText.replace("#","-");
-    url = url + battleTag;
-
-    browser.tabs.create({
-      "url": url
-    } );
 } );
